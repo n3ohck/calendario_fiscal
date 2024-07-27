@@ -2,15 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../config/mysql');
-
-function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+const { escapeHtml } = require('../utils/utils');
 
 // Función para construir la consulta SQL con condiciones dinámicas
 function buildQuery(params) {
