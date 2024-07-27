@@ -3,14 +3,13 @@ require('dotenv').config();
 const ejs = require('ejs');
 const path = require('path');
 const fs = require('fs');
-// Configura el transportador de nodemailer
 const transporter = nodemailer.createTransport({
-    host: 'email-smtp.us-east-1.amazonaws.com', // Cambia la región según tu configuración
-    port: 587, // Puerto para TLS
-    secure: false, // Usa TLS
+    host: process.env.MAILER_HOST,
+    port: process.env.MAILER_PORT,
+    secure: true,
     auth: {
-        user: 'tuemail@ejemplo.com', // Tu dirección de correo de WorkMail
-        pass: 'tucontraseña' // Tu contraseña de WorkMail
+        user: process.env.MAILER_USER,
+        pass: process.env.MAILER_PASS
     }
 });
 
@@ -27,7 +26,7 @@ const sendEmail = async (to, subject, templateData) => {
 
         // Configuración del correo electrónico
         const mailOptions = {
-            from: 'tuemail@gmail.com',
+            from: process.env.MAILER_FROM,
             to: to,
             subject: subject,
             html: html
@@ -42,4 +41,4 @@ const sendEmail = async (to, subject, templateData) => {
 };
 
 // Ejemplo de uso
-sendEmail('destinatario@example.com', 'Asunto del Correo', { name: 'Juan' });
+// sendEmail('n3ochk.mx@gmail.com', 'Asunto del Correo', { name: 'Juan' });
