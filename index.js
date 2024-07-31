@@ -4,6 +4,7 @@ const express = require('express');
 const eventsRouter = require('./routes/events');
 const taxRegimensRouter = require('./routes/taxRegimens');
 const taxPayersRouter = require('./routes/taxPayers');
+const testEmailRouter = require('./routes/tests');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use('/api/sat/events', eventsRouter);
 app.use('/api/sat/tax_regimens', taxRegimensRouter);
 app.use('/api/suscribe', taxPayersRouter);
 app.use('/api/unsuscribe', taxPayersRouter);
+app.use('/api/test', testEmailRouter);
 
 app.get('/api', (req, res) => {
     res.send({ message: 'Hello from the server!' });

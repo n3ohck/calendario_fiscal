@@ -6,18 +6,17 @@ const fs = require('fs');
 const transporter = nodemailer.createTransport({
     host: process.env.MAILER_HOST,
     port: process.env.MAILER_PORT,
-    secure: true,
+    secure: process.env.MAILER_SECURE,
     auth: {
         user: process.env.MAILER_USER,
         pass: process.env.MAILER_PASS
     }
 });
 
-const sendEmail = async (to, subject, templateData) => {
+const sendEmail = (to, subject,templateData) => {
     try {
         // Ruta del archivo de plantilla
         const templatePath = path.join(__dirname, 'templates/emailTemplate.ejs');
-
         // Leer el archivo de plantilla
         const templateStr = fs.readFileSync(templatePath, 'utf8');
 
@@ -31,14 +30,12 @@ const sendEmail = async (to, subject, templateData) => {
             subject: subject,
             html: html
         };
-
-        // Enviar el correo
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+        const info = transporter.sendMail(mailOptions);
+        return info.response;
     } catch (error) {
-        console.error('Error sending email:', error);
+        throw error;
     }
 };
-
+module.exports = { sendEmail };
 // Ejemplo de uso
-// sendEmail('n3ochk.mx@gmail.com', 'Asunto del Correo', { name: 'Juan' });
+//sendEmail('n3ochk.mx@gmail.com', 'Asunto del Correo', { name: 'Juan' });
