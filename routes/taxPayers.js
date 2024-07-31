@@ -47,7 +47,7 @@ const setSuscribe = async (params) => {
             const values = [params.email, params.taxRegimeId];
             connection.query(query, values, (error, results) => {
                 if (error) return reject(error);
-                sendEmail(params.email, 'Registro SAT', { email: params.email });
+                sendmail.sendEmail(params.email, process.env.PORTAL_TITLE, { name: params.email });
                 resolve(results);
             });
         });

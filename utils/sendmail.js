@@ -20,6 +20,7 @@ const sendEmail = (to, subject,templateData) => {
         // Leer el archivo de plantilla
         const templateStr = fs.readFileSync(templatePath, 'utf8');
 
+        templateData.url = process.env.PORTAL_URL;
         // Renderizar la plantilla con datos
         const html = ejs.render(templateStr, templateData);
 
@@ -37,5 +38,3 @@ const sendEmail = (to, subject,templateData) => {
     }
 };
 module.exports = { sendEmail };
-// Ejemplo de uso
-//sendEmail('n3ochk.mx@gmail.com', 'Asunto del Correo', { name: 'Juan' });
