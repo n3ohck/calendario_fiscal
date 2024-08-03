@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const sendEmail = (to, subject,templateData) => {
     try {
         // Ruta del archivo de plantilla
-        const templatePath = path.join(__dirname, 'templates/emailTemplateEvent.ejs');
+        const templatePath = path.join(__dirname, 'templates/emailTemplate.ejs');
         // Leer el archivo de plantilla
         const templateStr = fs.readFileSync(templatePath, 'utf8');
 
@@ -45,6 +45,7 @@ const sendEmailEvent = (to, subject,templateData) => {
         // Leer el archivo de plantilla
         const templateStr = fs.readFileSync(templatePath, 'utf8');
 
+        templateData.name = to;
         templateData.url = process.env.PORTAL_URL;
         // Renderizar la plantilla con datos
         const html = ejs.render(templateStr, templateData);

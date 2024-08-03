@@ -62,17 +62,23 @@ const createEvent = (params) => {
     return new Promise((resolve, reject) => {
         connection.query('INSERT INTO events SET ?', params, (error, results) => {
             if (error) reject(error);
+            params.id = results.insertId;
             notificate(params);
+            resolve(results);
         });
     });
 
 }
 
 const notificate = (event) =>{
-    connection.query('SELECT email FROM tax_payers WHERE tax_regime_id = ? and status = ?', [event.tax_regime_id, 'activo'], (error, results) => {
+    connection.query('SELECT * FROM tax_payers WHERE tax_regime_id = ? and status = ?', [event.tax_regime_id, 'activo'], (error, results) => {
         if (error) reject(error);
         results.forEach(taxPayer => {
             sendmail.sendEmailEvent(taxPayer.email, 'Nuevo evento', event);
+            console.log({
+                event:event,
+                taxPayer:taxPayer
+            });
             connection.query('INSERT INTO event_tax_payer_notifications SET ?', {event_id: event.id, tax_payer_id: taxPayer.id, tax_regime_id: taxPayer.tax_regime_id});
         });
     });
