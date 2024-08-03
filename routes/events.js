@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../config/mysql');
 const sendmail = require('../utils/sendmail');
+const scapeHtml = require('../utils/scapeHtml');
 
 // Función para construir la consulta SQL con condiciones dinámicas
 function buildQuery(params) {
@@ -45,6 +46,7 @@ const getDates = (id) => {
 const getEvents = (params) => {
     return new Promise((resolve, reject) => {
         const { query, params: queryParams } = buildQuery(params);
+        console.log(query)
         connection.query(query, queryParams, (error, results) => {
             if (error) reject(error);
             if( results.length ){
@@ -80,9 +82,9 @@ const notificate = (event) =>{
     });
 }
 
-router.get('/', async (req, res) => {
+router.get('/',  (req, res) => {
     try {
-        const events = await getEvents(req.query);
+        const events = getEvents(req.query);
         res.json(events);
     } catch (error) {
         res.status(500).send('Error fetching events');
