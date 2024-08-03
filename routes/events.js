@@ -47,12 +47,6 @@ const getEvents = (params) => {
         const { query, params: queryParams } = buildQuery(params);
         connection.query(query, queryParams, (error, results) => {
             if (error) reject(error);
-            if( results.length ){
-                results = results.map(event => {
-                    event.dates = getDates(event.id);
-                    return event;
-                });
-            }
             resolve(results);
         });
     });
