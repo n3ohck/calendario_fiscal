@@ -15,15 +15,15 @@ function buildQuery(params) {
     // Añadir condiciones dinámicas según los parámetros presentes
     if (params.tax_regime_id !== undefined) {
         conditions.push('tax_regime_id = ?');
-        queryParams.push(escapeHtml(params.tax_regime_id));
+        queryParams.push(params.tax_regime_id);
     }
     if (params.year !== undefined) {
         conditions.push('year = ?');
-        queryParams.push(escapeHtml(params.year));
+        queryParams.push(params.year);
     }
     if (params.month !== undefined) {
         conditions.push('month = ?');
-        queryParams.push(escapeHtml(params.month));
+        queryParams.push(params.month);
     }
 
     // Construir la cláusula WHERE si hay condiciones
