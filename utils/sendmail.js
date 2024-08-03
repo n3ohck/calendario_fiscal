@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 const sendEmail = (to, subject,templateData) => {
     try {
         // Ruta del archivo de plantilla
-        const templatePath = path.join(__dirname, 'templates/emailTemplate.ejs');
+        const templatePath = path.join(__dirname, 'templates/emailTemplateEvent.ejs');
         // Leer el archivo de plantilla
         const templateStr = fs.readFileSync(templatePath, 'utf8');
 
@@ -37,4 +37,29 @@ const sendEmail = (to, subject,templateData) => {
         throw error;
     }
 };
-module.exports = { sendEmail };
+
+const sendEmailEvent = (to, subject,templateData) => {
+    try {
+        // Ruta del archivo de plantilla
+        const templatePath = path.join(__dirname, 'templates/emailTemplateEvent.ejs');
+        // Leer el archivo de plantilla
+        const templateStr = fs.readFileSync(templatePath, 'utf8');
+
+        templateData.url = process.env.PORTAL_URL;
+        // Renderizar la plantilla con datos
+        const html = ejs.render(templateStr, templateData);
+
+        // Configuración del correo electrónico
+        const mailOptions = {
+            from: process.env.MAILER_FROM,
+            to: to,
+            subject: subject,
+            html: html
+        };
+        const info = transporter.sendMail(mailOptions);
+        return info.response;
+    } catch (error) {
+        throw error;
+    }
+};
+module.exports = { sendEmail, sendEmailEvent };

@@ -1,13 +1,19 @@
 // index.js
 require('dotenv').config();
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 const eventsRouter = require('./routes/events');
 const taxRegimensRouter = require('./routes/taxRegimens');
 const taxPayersRouter = require('./routes/taxPayers');
 const testEmailRouter = require('./routes/tests');
+const authenticateJWT = require('./routes/jwt');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json()); // Middleware para parsear cuerpos JSON
 

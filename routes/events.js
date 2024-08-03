@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../config/mysql');
-const { escapeHtml } = require('../utils/utils');
+const sendmail = require('../utils/sendmail');
 
 // Función para construir la consulta SQL con condiciones dinámicas
 function buildQuery(params) {
@@ -58,9 +58,38 @@ const getEvents = (params) => {
     });
 };
 
+const createEvent = (params) => {
+    return new Promise((resolve, reject) => {
+        connection.query('INSERT INTO events SET ?', params, (error, results) => {
+            if (error) reject(error);
+            notificate(params);
+        });
+    });
+
+}
+
+const notificate = (event) =>{
+    connection.query('SELECT email FROM tax_payers WHERE tax_regime_id = ? and status = ?', [event.tax_regime_id, 'activo'], (error, results) => {
+        if (error) reject(error);
+        results.forEach(taxPayer => {
+            sendmail.sendEmailEvent(taxPayer.email, 'Nuevo evento', event);
+            connection.query('INSERT INTO event_tax_payer_notifications SET ?', {event_id: event.id, tax_payer_id: taxPayer.id, tax_regime_id: taxPayer.tax_regime_id});
+        });
+    });
+}
+
 router.get('/', async (req, res) => {
     try {
         const events = await getEvents(req.query);
+        res.json(events);
+    } catch (error) {
+        res.status(500).send('Error fetching events');
+    }
+});
+
+router.post('/', async (req, res) => {
+    try {
+        const events = await createEvent(req.body);
         res.json(events);
     } catch (error) {
         res.status(500).send('Error fetching events');
