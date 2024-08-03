@@ -8,10 +8,11 @@ const eventsRouter = require('./routes/events');
 const taxRegimensRouter = require('./routes/taxRegimens');
 const taxPayersRouter = require('./routes/taxPayers');
 const testEmailRouter = require('./routes/tests');
-const authenticateJWT = require('./routes/jwt');
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
