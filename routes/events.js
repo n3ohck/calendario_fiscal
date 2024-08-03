@@ -75,10 +75,6 @@ const notificate = (event) =>{
         if (error) reject(error);
         results.forEach(taxPayer => {
             sendmail.sendEmailEvent(taxPayer.email, 'Nuevo evento', event);
-            console.log({
-                event:event,
-                taxPayer:taxPayer
-            });
             connection.query('INSERT INTO event_tax_payer_notifications SET ?', {event_id: event.id, tax_payer_id: taxPayer.id, tax_regime_id: taxPayer.tax_regime_id});
         });
     });
